@@ -73,7 +73,7 @@ fun LoginPage(navController: NavHostController) {
             )
         }
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { navController.navigate(NavRoute.HOME.name) },
             Modifier.width(280.dp).padding(vertical = 30.dp),
             shape = RoundedCornerShape(7.dp),
             colors = ButtonDefaults.buttonColors(Purple20)

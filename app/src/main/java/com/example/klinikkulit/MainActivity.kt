@@ -11,6 +11,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.klinikkulit.ui.screens.FAQPage
+import com.example.klinikkulit.ui.screens.HomeScreen
 import com.example.klinikkulit.ui.screens.LoginPage
 import com.example.klinikkulit.ui.screens.SignUpPage
 import com.example.klinikkulit.ui.theme.KlinikKulitTheme
@@ -30,6 +32,12 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(NavRoute.SIGNUP.name) {
                         SignUpPage(navController)
+                    }
+                    composable(NavRoute.HOME.name) {
+                        HomeScreen(navController)
+                    }
+                    composable(NavRoute.FAQ.name) {
+                        FAQPage(navController)
                     }
                 }
             }
