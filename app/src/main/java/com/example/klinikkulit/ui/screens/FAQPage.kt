@@ -28,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -51,12 +52,19 @@ fun FAQPage(navController: NavHostController) {
                     "membentuk massa jaringan yang disebut tumor. " +
                     "Tumor dapat bersifat ganas (kanker) atau jinak (non-kanker), " +
                     "tergantung pada sejauh mana mereka dapat menyebar ke jaringan di sekitarnya."
-        )
+        ),
+        Question("Apa itu kanker kulit?", ""),
+        Question("Apakah kanker kulit berbahaya?", ""),
+        Question("Apa perbedaan kanker kulit melanoma dan non-melanoma?", ""),
+        Question("Bagaimana KlinikKulit bisa mendeteksi kanker kulit?", ""),
+        Question("Apakah hasil deteksi KlinikKulit 100% akurat?", ""),
     )
     Scaffold(topBar = { TopBar(navController, "FAQ")}) {
         Column(Modifier.verticalScroll(rememberScrollState()).padding(it)) {
             Spacer(Modifier.height(10.dp))
-            FAQCard(questionsList[0])
+            questionsList.forEach { question ->
+                FAQCard(question)
+            }
         }
     }
 
@@ -67,11 +75,11 @@ fun FAQPage(navController: NavHostController) {
 fun FAQCard(question: Question) {
     var expandedState by remember { mutableStateOf(false) }
     val rotationState by animateFloatAsState(
-        targetValue = if (expandedState) 180f else 0f,
+        targetValue = if (expandedState) 90f else 0f,
         label = ""
     )
     Card(
-        onClick = { /*TODO*/ },
+        onClick = { expandedState = !expandedState },
         Modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp)
@@ -85,21 +93,18 @@ fun FAQCard(question: Question) {
         shape = RoundedCornerShape(23.dp),
         colors = CardDefaults.cardColors(Purple50)
     ) {
-        Column(Modifier.padding(start = 10.dp)) {
+        Column(Modifier.padding(start = 10.dp, end = 15.dp).padding(vertical = 10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(
                     onClick = { expandedState = !expandedState },
                     Modifier.rotate(rotationState)
                 ) {
-                    Icon(painterResource(R.drawable.arrow_right_bold), null)
+                    Icon(painterResource(R.drawable.arrow_right_bold), null,
+                        tint = Color.White)
                 }
                 Spacer(Modifier.width(7.dp))
                 AppText(question.questionTitle, FontWeight.ExtraBold, 20.sp)
             }
-            AppText(
-                question.answer, FontWeight.Medium, 16.sp,
-                modifier = Modifier.padding(start = 7.dp)
-            )
             if (expandedState) {
                 AppText(question.answer, FontWeight.Medium, 16.sp,
                     modifier = Modifier.padding(start = 7.dp))
