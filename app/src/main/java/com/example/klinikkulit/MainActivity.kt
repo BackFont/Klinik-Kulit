@@ -1,22 +1,16 @@
 package com.example.klinikkulit
 
-import android.graphics.Camera
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.klinikkulit.models.CameraState
+import com.example.klinikkulit.ui.screens.ArticlesPage
 import com.example.klinikkulit.ui.screens.CameraScreen
 import com.example.klinikkulit.ui.screens.EditProfilePage
 import com.example.klinikkulit.ui.screens.FAQPage
@@ -27,7 +21,6 @@ import com.example.klinikkulit.ui.screens.ScanResultScreen
 import com.example.klinikkulit.ui.screens.SignUpPage
 import com.example.klinikkulit.ui.theme.KlinikKulitTheme
 import com.example.klinikkulit.utils.NavRoute
-import com.example.klinikkulit.utils.sharedViewModel
 import com.example.klinikkulit.viewmodels.CameraViewModel
 
 class MainActivity : ComponentActivity() {
@@ -66,8 +59,11 @@ class MainActivity : ComponentActivity() {
                     composable(NavRoute.SCAN_RESULT.name) {
                         val cameraState by viewModel.state.collectAsStateWithLifecycle()
                         cameraState.capturedImage?.let {
-                            ScanResultScreen(it, navController)
+                            ScanResultScreen(it, navController, viewModel::onCapturedPhotoConsumed)
                         }
+                    }
+                    composable(NavRoute.ARTICLES.name) {
+                        ArticlesPage(navController)
                     }
                 }
             }

@@ -6,7 +6,7 @@ enum class NavRoute {
     HOME,
     FAQ,
     PROFILE,
-    ARTICLE,
+    ARTICLES,
     EDIT_PROFILE,
     CAMERA,
     SCAN_RESULT

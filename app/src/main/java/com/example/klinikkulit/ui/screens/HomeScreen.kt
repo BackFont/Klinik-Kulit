@@ -3,6 +3,7 @@ package com.example.klinikkulit.ui.screens
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -47,6 +48,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.klinikkulit.R
+import com.example.klinikkulit.dummy.DummyProvider
 import com.example.klinikkulit.models.Article
 import com.example.klinikkulit.ui.theme.Purple20
 import com.example.klinikkulit.ui.theme.Purple50
@@ -60,17 +62,13 @@ import com.google.accompanist.permissions.rememberPermissionState
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun HomeScreen(navController: NavHostController) {
-    val articlesList = listOf(
-        Article(
-            "Mengenal Yayasan Kanker Indonesia, " +
-                    "Wadah Kepedulian Kanker masyarakat Indonesia", R.drawable.image_12
-        )
-    )
+    val articlesList = DummyProvider().articlesList
     val cameraPermissionState: PermissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
 
     Scaffold(
         topBar = { TopBar(navController, "Beranda") },
-        bottomBar = { BottomBar(navController) }) {
+        bottomBar = { BottomBar(navController) }
+    ) {
         Column(
             Modifier
                 .padding(it)
@@ -217,8 +215,13 @@ fun HomeScreen(navController: NavHostController) {
                     )
                 }
             }
-            Row(Modifier.padding(bottom = 20.dp)) {
+            Row(
+                Modifier
+                    .padding(bottom = 20.dp)
+                    .horizontalScroll(rememberScrollState())) {
                 ArticleCard(articlesList[0])
+                Spacer(Modifier.width(10.dp))
+                ArticleCard(articlesList[1])
             }
         }
     }
@@ -289,16 +292,16 @@ fun BottomBar(navController: NavHostController) {
         }
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             val tint =
-                if (currentDestination?.hierarchy?.any { it.route == NavRoute.ARTICLE.name } == true)
+                if (currentDestination?.hierarchy?.any { it.route == NavRoute.ARTICLES.name } == true)
                     Purple20 else Color(0xFF9A97B0)
             IconButton(onClick = {
-//                navController.navigate(NavRoute.ARTICLE.name) {
-//                    popUpTo(navController.graph.findStartDestination().id) {
-//                        saveState = true
-//                    }
-//                    launchSingleTop = true
-//                    restoreState = true
-//                }
+                navController.navigate(NavRoute.ARTICLES.name) {
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
             }) {
                 Icon(Icons.Default.Newspaper, "Article", tint = tint)
             }
