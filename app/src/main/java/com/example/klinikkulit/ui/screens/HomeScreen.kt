@@ -31,9 +31,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,6 +43,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -50,14 +51,18 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.klinikkulit.R
 import com.example.klinikkulit.dummy.DummyProvider
 import com.example.klinikkulit.models.Article
+import com.example.klinikkulit.models.User
 import com.example.klinikkulit.ui.theme.Purple20
 import com.example.klinikkulit.ui.theme.Purple50
 import com.example.klinikkulit.utils.AppText
 import com.example.klinikkulit.utils.NavRoute
+import com.example.klinikkulit.viewmodels.MainViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
@@ -142,7 +147,9 @@ fun HomeScreen(navController: NavHostController) {
                         Box(Modifier.fillMaxWidth(), Alignment.CenterEnd) {
                             Image(
                                 painterResource(R.drawable.cancer), null,
-                                Modifier.size(142.dp)
+                                Modifier
+                                    .size(144.dp)
+                                    .offset(x = 2.dp)
                             )
                         }
                     }
@@ -166,7 +173,8 @@ fun HomeScreen(navController: NavHostController) {
                                     .fillMaxWidth(), Arrangement.SpaceAround
                             ) {
                                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                    Icon(painterResource(R.drawable.virus), null)
+                                    Icon(painterResource(R.drawable.virus), null,
+                                        tint = Color.White)
                                     AppText("19 juta kasus kanker", fontSize = 8.sp)
                                     AppText("setiap tahun", fontSize = 8.sp)
                                 }
@@ -215,10 +223,7 @@ fun HomeScreen(navController: NavHostController) {
                     )
                 }
             }
-            Row(
-                Modifier
-                    .padding(bottom = 20.dp)
-                    .horizontalScroll(rememberScrollState())) {
+            Row(Modifier.padding(bottom = 20.dp)) {
                 ArticleCard(articlesList[0])
                 Spacer(Modifier.width(10.dp))
                 ArticleCard(articlesList[1])
@@ -237,10 +242,12 @@ fun TopBar(navController: NavHostController, title: String) {
         ) {
             Image(painterResource(R.drawable.logo), null, Modifier.padding(10.dp, 4.dp))
             AppText(title, FontWeight.Bold, 18.sp)
-            Row(Modifier.padding(end = 15.dp)) {
+            Row(Modifier.padding(end = 15.dp), verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = { navController.navigate(NavRoute.FAQ.name) }) {
                     Icon(painterResource(R.drawable.help), null, tint = Color.White)
                 }
+                Spacer(Modifier.width(3.dp))
+                Image(painterResource(R.drawable.mbappe), null, Modifier.size(22.dp))
             }
         }
     }
@@ -252,7 +259,7 @@ fun ArticleCard(article: Article) {
         shape = RoundedCornerShape(14.dp),
         elevation = CardDefaults.cardElevation(5.dp),
         colors = CardDefaults.cardColors(Color.White),
-        modifier = Modifier.width(200.dp)
+        modifier = Modifier.width(180.dp)
     ) {
         Image(painterResource(article.image), null)
         AppText(
@@ -276,7 +283,7 @@ fun BottomBar(navController: NavHostController) {
                     Purple20 else Color(0xFF9A97B0)
             IconButton(onClick = {
                 navController.navigate(NavRoute.HOME.name) {
-                    popUpTo(navController.graph.findStartDestination().id) {
+                    popUpTo(NavRoute.HOME.name) {
                         saveState = true
                     }
                     launchSingleTop = true
@@ -296,7 +303,7 @@ fun BottomBar(navController: NavHostController) {
                     Purple20 else Color(0xFF9A97B0)
             IconButton(onClick = {
                 navController.navigate(NavRoute.ARTICLES.name) {
-                    popUpTo(navController.graph.findStartDestination().id) {
+                    popUpTo(NavRoute.HOME.name) {
                         saveState = true
                     }
                     launchSingleTop = true
@@ -316,7 +323,7 @@ fun BottomBar(navController: NavHostController) {
                     Purple20 else Color(0xFF9A97B0)
             IconButton(onClick = {
                 navController.navigate(NavRoute.PROFILE.name) {
-                    popUpTo(navController.graph.findStartDestination().id) {
+                    popUpTo(NavRoute.HOME.name) {
                         saveState = true
                     }
                     launchSingleTop = true

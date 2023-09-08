@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -47,29 +48,30 @@ fun ArticlesPage(navController: NavHostController) {
         Column(
             Modifier
                 .padding(it)
-                .verticalScroll(rememberScrollState())
-        ) {
+                .padding(18.dp, 0.dp)
+                .verticalScroll(rememberScrollState())) {
             Card(
-                shape = RoundedCornerShape(14.dp),
+                shape = RoundedCornerShape(23.dp),
                 elevation = CardDefaults.cardElevation(5.dp),
                 colors = CardDefaults.cardColors(Purple50),
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier.padding(vertical = 8.dp)
             ) {
-                Row(Modifier.fillMaxWidth()) {
-                    Column(Modifier.padding(8.dp)) {
+                Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween) {
+                    Column(Modifier.padding(top = 10.dp, start = 15.dp)) {
                         AppText("Kanker Kulit,", FontWeight.ExtraBold, 25.sp)
                         AppText(
                             "Pahami jenis-jenis dan dampak kanker kulit",
                             FontWeight.Bold,
-                            20.sp
+                            16.sp,
+                            modifier = Modifier.width(200.dp),
+                            lineHeight = 20.sp
                         )
                         Spacer(Modifier.height(20.dp))
                         AppText("Edukasi, Sains", fontSize = 11.sp)
                     }
                     Image(
                         painterResource(R.drawable.image_16), null,
-                        Modifier.clip(RoundedCornerShape(23.dp)
-                        )
+                        Modifier.clip(RoundedCornerShape(23.dp))
                     )
                 }
             }
@@ -87,13 +89,15 @@ fun ArticlesPage(navController: NavHostController) {
                 Spacer(Modifier.width(10.dp))
                 ArticleCard(articlesList[1])
             }
+            Spacer(Modifier.height(15.dp))
             Row {
                 ArticleCard(articlesList[2])
                 Spacer(Modifier.width(10.dp))
                 ArticleCard(articlesList[3])
             }
+            Spacer(Modifier.height(15.dp))
             Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween) {
-                AppText("Untukmu", FontWeight.Bold, 23.sp, MaterialTheme.colorScheme.onSurface)
+                AppText("Sains", FontWeight.Bold, 23.sp, MaterialTheme.colorScheme.onSurface)
                 TextButton(onClick = { /*TODO*/ }) {
                     AppText(
                         "Selengkapnya", FontWeight.Medium, 14.sp,
@@ -101,6 +105,12 @@ fun ArticlesPage(navController: NavHostController) {
                     )
                 }
             }
+            Row {
+                ArticleCard(articlesList[4])
+                Spacer(Modifier.width(10.dp))
+                ArticleCard(articlesList[5])
+            }
+            Spacer(Modifier.height(20.dp))
         }
     }
 }

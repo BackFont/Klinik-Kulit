@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -95,4 +96,13 @@ dependencies {
 
     //// ACCOMPANIST ////
     implementation("com.google.accompanist:accompanist-permissions:0.33.1-alpha")
+
+    //Firebase
+    implementation(platform("com.google.firebase:firebase-bom:32.2.3"))
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx")
+
+    //Splash Screen
+    implementation("androidx.core:core-splashscreen:1.0.1")
+
 }

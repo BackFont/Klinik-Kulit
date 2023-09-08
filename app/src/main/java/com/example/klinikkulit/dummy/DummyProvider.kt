@@ -22,6 +22,14 @@ class DummyProvider {
         Article(
             "Mengapa kita sangat mungkin terjangkit kanker?",
             R.drawable.image_20
+        ),
+        Article(
+            "Memahami mutasi sel kanker",
+            R.drawable.image_18
+        ),
+        Article(
+            "Sejarah kanker",
+            R.drawable.image_19
         )
     )
 

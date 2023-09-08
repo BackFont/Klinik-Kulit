@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.getValue
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -22,18 +23,25 @@ import com.example.klinikkulit.ui.screens.SignUpPage
 import com.example.klinikkulit.ui.theme.KlinikKulitTheme
 import com.example.klinikkulit.utils.NavRoute
 import com.example.klinikkulit.viewmodels.CameraViewModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class MainActivity : ComponentActivity() {
     private lateinit var navController: NavHostController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen()
         setContent {
             navController = rememberNavController()
             val viewModel: CameraViewModel = viewModel()
+            val auth: FirebaseAuth = Firebase.auth
+            val startDestination = if (auth.currentUser != null) NavRoute.HOME.name
+            else NavRoute.LOGIN.name
 
             KlinikKulitTheme {
                 // A surface container using the 'background' color from the theme
-                NavHost(navController = navController, startDestination = NavRoute.LOGIN.name) {
+                NavHost(navController, startDestination) {
                     composable(NavRoute.LOGIN.name) {
                         LoginPage(navController)
                     }
